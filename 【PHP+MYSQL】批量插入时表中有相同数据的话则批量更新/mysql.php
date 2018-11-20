@@ -249,27 +249,6 @@
             return $this->waitSql;
         }
 
-
-        /**
-         * UpdateOrCreate 存在及更新，不存在即创建
-         * @author   liuml  
-         * @DateTime 2018/9/14  9:46
-         */
-        public function updateOrCreate(array $attributes, array $values)
-        {
-            return $this->model->updateOrCreate($attributes, $values);
-        }
-
-        /**
-         * UpdateOrInsert 存在及更新，不存在即创建
-         * @author   liuml  
-         * @DateTime 2018/9/14  9:46
-         */
-        public function updateOrInsert(array $attributes, array $values)
-        {
-            return $this->model->updateOrInsert($attributes, $values);
-        }
-
         /**
          * ObjectToArray 对象使用 toArray 转为数组
          * @param $obj
