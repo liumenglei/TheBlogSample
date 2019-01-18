@@ -1,14 +1,14 @@
 <?php
     /**
      * EloquentRepository.php
-     * 
+     *
      * Created by PhpStorm.
      * author: liuml
      * DateTime: 2018/9/11  18:14
      */
-    // namespace App\Repositories;
+    namespace App\Repositories;
 
-    // use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\DB;
 
     class EloquentRepository
     {
@@ -45,13 +45,13 @@
          */
         protected $timeFormat = 'Y-m-d H:i:s';
 
-        
+
         /**
          * uOrCreate 批量更新或创建
          * @param string $table
          * @param string $key
          * @param array  $data
-         * author: liuml  
+         * author: liuml
          * DateTime: 2018/9/13  15:33
          */
         public function uOrCreate(array $data)
@@ -80,7 +80,7 @@
          * addTimeField 自动填充时间字段
          * @param $arr
          * @return mixed
-         * @author   liuml  
+         * @author   liuml
          * @DateTime 2018/9/13  19:45
          */
         public function addTimeField(&$arr)
@@ -103,7 +103,7 @@
          * setUpdateKey
          * @param $keyVal 可以传入k=v的字符串(多个之间以英文逗号隔开)，或者数组[ 'title'=>'values(title)', 'details'=>'values(details)'],或者['title','details']<注：传入第二种数组格式的话默认会转为第一种格式数组后进行操作>;
          * @return $this
-         * @author   liuml  
+         * @author   liuml
          * @DateTime 2018/9/13  15:33
          */
         public function setUpdateKey($keyVal)
@@ -139,7 +139,7 @@
 
         /**
          * arrayToKv  数组转键值对
-         * @param array $array
+         * @param array  $array
          * @param string $delimiter
          * @return string
          * author: liuml  <liumenglei0211@163.com>
@@ -148,7 +148,7 @@
         private function arrayToKv(array $array, $delimiter = ',')
         {
             $str = '';
-            array_walk($array, function ($v, $k, $delimiter) use (&$str) {
+            array_walk($array, function($v, $k, $delimiter) use (&$str) {
                 $str .= "{$k}={$v}{$delimiter}";
             }, $delimiter);
             return rtrim($str, $delimiter);
@@ -157,7 +157,7 @@
         /**
          * keyToKV 将索引数组转为固定格式的关联数组
          * @param $key
-         * @author   liuml  
+         * @author   liuml
          * @DateTime 2018/9/13  18:08
          */
         private function keyToKV($key)
@@ -176,7 +176,7 @@
          * setTimeField 设置自动添加的时间字段，默认created_at,updated_at,如果不要自动添加时间字段则传入空值或null就行
          * @param array $timeField
          * @return $this
-         * @author   liuml 
+         * @author   liuml
          * @DateTime 2018/9/13  19:20
          */
         public function setTimeField(array $timeField)
@@ -196,7 +196,7 @@
          * setInsertKey 设置批量更新的key
          * @param array $key
          * @return $this
-         * author: liuml  
+         * author: liuml
          * DateTime: 2018/9/13  15:33
          */
         public function setInsertKey($key)
@@ -217,7 +217,7 @@
          * setTable 设置表名
          * @param string $table
          * @return $this
-         * author: liuml  
+         * author: liuml
          * DateTime: 2018/9/13  15:33
          */
         public function setTable($table = '')
@@ -229,19 +229,22 @@
         /**
          * sqlExec 执行sql语句
          * @return mixed
-         * author: liuml  
+         * author: liuml
          * DateTime: 2018/9/13  15:33
          */
         public function execSql()
         {
-            $db = DB::reconnect();
-            return $db->getPdo()->exec($this->waitSql);
+
+        	return  DB::insert($this->waitSql);
+
+            // $db = DB::connection();
+            // return $db->getPdo()->exec($this->waitSql);
         }
 
         /**
          * getSql
          * @return 将要执行的sql
-         * @author   liuml  
+         * @author   liuml
          * @DateTime 2018/9/13  19:19
          */
         public function getSql()
@@ -249,11 +252,12 @@
             return $this->waitSql;
         }
 
+
         /**
          * ObjectToArray 对象使用 toArray 转为数组
          * @param $obj
          * @return array
-         * @author   liuml  
+         * @author   liuml
          * @DateTime 2018/9/20  10:28
          */
         public function ObjectToArray($obj)
@@ -269,7 +273,7 @@
         /**
          * listTimeToDate 列表时间戳转格式化时间
          * @param $data
-         * @author   liuml  
+         * @author   liuml
          * @DateTime 2018/9/20  10:30
          */
         public function listTimeToDate(array $data, array $filed = ['created_at'], string $format = 'Y-m-d H:i:s')
@@ -281,33 +285,27 @@
             }, $filed);
             return $data;
         }
-
-
     }
 
-// 示例。
-    $er = new EloquentRepository();
+    // 示例。
+    $er   = new EloquentRepository();
     $data = [
         [
-            'title' => '123',
-            'details' => '123',
-            'set_key' => '123',
+            'title'     => '123","lpp',
+            'details'   => '123',
+            'set_key'   => '123',
             'set_value' => '123',
-            'type' => '123',
-            'created_at' => '123',
-            'updated_at' => '123'
+            'type'      => '123',
         ],
         [
-            'title' => '12233',
-            'details' => '123',
-            'set_key' => '12334',
+            'title'     => '12233',
+            'details'   => '123',
+            'set_key'   => '12334',
             'set_value' => '123',
-            'type' => '123',
-            'created_at' => '123',
-            'updated_at' => '123'
-        ]
+            'type'      => '123',
+        ],
     ];
 
     echo $er->setTable('system_config')->uOrCreate($data)->getSql();
-
+	// $er->setTable('system_config')->uOrCreate($data)->execSql();
     // INSERT INTO system_config (title,details,set_key,set_value,type,created_at,updated_at) values ("123","123","123","123","123","2018-11-20 06:06:46","2018-11-20 06:06:46"),("12233","123","12334","123","123","2018-11-20 06:06:46","2018-11-20 06:06:46") ON DUPLICATE KEY UPDATE title=VALUES(title),details=VALUES(details),set_key=VALUES(set_key),set_value=VALUES(set_value),type=VALUES(type),updated_at=VALUES(updated_at);
